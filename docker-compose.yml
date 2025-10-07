@@ -59,7 +59,8 @@ services:
     restart: unless-stopped
     volumes:
       - file_storage_data:/app/uploads
-
+    command: sh -c "node ./node_modules/typeorm/cli.js migration:run --dataSource ./dist/src/infrastructure/postgres/typeorm/migrations/data-source.js && node dist/main.js"
+    
 volumes:
   postgres_data: 
     driver: local
