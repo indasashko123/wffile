@@ -58,9 +58,7 @@ services:
       - app-network
     restart: unless-stopped
     volumes:
-      - .:/app
       - file_storage_data:/app/uploads
-    command: npm run start:prod
 
 volumes:
   postgres_data: 

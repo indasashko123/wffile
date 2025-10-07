@@ -8,7 +8,6 @@
   "scripts": {
     "build": "nest build",
     "start": "node dist/main",
-    "start:prod": "npm run build && npm run start",
     "start:dev": "nest start --watch",
     "test": "jest --forceExit --ci --maxWorkers=2",
     "test:local:up": "docker-compose --env-file .env.test -f docker-compose.test.yaml up -d ",
@@ -24,6 +23,7 @@
     "typeorm:migration-create": "ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js migration:create  ./src/infrastructure/postgres/typeorm/migrations/components/RENAME_ME"
   },
   "dependencies": {
+    "uuid": "^13.0.0",
     "@nestjs/common": "^11.0.1",
     "@nestjs/core": "^11.0.1",
     "@nestjs/platform-express": "^11.0.1",
@@ -73,8 +73,7 @@
     "ts-node": "^10.9.2",
     "tsconfig-paths": "^4.2.0",
     "typescript": "^5.8.3",
-    "typescript-eslint": "^8.20.0",
-    "uuid": "^13.0.0"
+    "typescript-eslint": "^8.20.0"
   },
   "jest": {
     "moduleFileExtensions": [
