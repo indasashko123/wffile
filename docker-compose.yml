@@ -1,0 +1,75 @@
+services:
+  postgres:
+    image: postgres:16
+    container_name: file-storage-postgres
+    environment:
+      POSTGRES_DB: file
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: root
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - app-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  redis:
+    image: redis:7.2-alpine
+    container_name: file-storage-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    networks:
+      - app-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  backend:
+    build: .
+    container_name: file-storage-backend
+    ports:
+      - "3005:3005"
+    environment:
+      - DATABASE_HOST=postgres
+      - DATABASE_PORT=5432
+      - DATABASE_USER=postgres
+      - DATABASE_PASSWORD=root
+      - DATABASE_NAME=file
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - PORT=3005
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks:
+      - app-network
+    restart: unless-stopped
+    volumes:
+      - .:/app
+      - file_storage_data:/app/uploads
+    command: npm run start:prod
+
+volumes:
+  postgres_data: 
+    driver: local
+  redis_data:
+    driver: local
+  file_storage_data:
+    driver: local
+    
+networks:
+  app-network:
+    driver: bridge
