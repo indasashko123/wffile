@@ -39,8 +39,6 @@ export class FileController {
     @UploadedFile() file: Express.Multer.File,
     @Req() req: ExtendRequest,
   ): Promise<string> {
-    console.log(file);
-
     const accountId = req.account.id;
     const fileData = {
       accountId,

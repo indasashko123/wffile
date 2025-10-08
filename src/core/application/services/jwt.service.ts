@@ -46,7 +46,6 @@ export abstract class JwtAbstractService implements IJwtService {
       const payload: AccessPayload = tokenData as AccessPayload;
       return payload;
     } catch (error) {
-      console.log(error);
       CommonError.Unauthorized('Invalid token');
     }
   }

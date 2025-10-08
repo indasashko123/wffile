@@ -6,13 +6,15 @@ import { ConfigAbstractService } from '../../core/application';
 import { TypeOrmAbstractConnection } from '../../infrastructure/postgres';
 import { ValidationPipe } from '@nestjs/common';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import * as cookieParser from 'cookie-parser';
+
 
 export async function start(): Promise<void> {
   const app = await NestFactory.create(AppModule);
   const config = app.get<ConfigAbstractService>(INFRASTRUCTURE_CONSTANTS.CONFIG);
   const pg = app.get<TypeOrmAbstractConnection>(INFRASTRUCTURE_CONSTANTS.PG);
   await pg.getClient().initialize();
-    
+     
   const swaggerConfig = new DocumentBuilder()
     .setTitle('File Storage API')
     .setDescription('API for file upload and download with authentication')
@@ -45,11 +47,24 @@ export async function start(): Promise<void> {
     transform: true,
     disableErrorMessages: false,
   }));
+  app.use(cookieParser());
   app.enableCors({
     origin: ['http://localhost:3000', 'http://127.0.0.1:3000'],
-    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
-    allowedHeaders: 'Content-Type, Accept, Authorization, X-Requested-With, Range',
-    exposedHeaders: 'Content-Range, X-Content-Range',
+    methods: ['GET', 'HEAD', 'PUT', 'PATCH', 'POST', 'DELETE', 'OPTIONS'],
+    allowedHeaders: [
+      'Content-Type', 
+      'Accept', 
+      'Authorization', 
+      'X-Requested-With', 
+      'Range',
+      'Cookie',
+      'Set-Cookie'
+    ],
+    exposedHeaders: [
+      'Content-Range', 
+      'X-Content-Range',
+      'Set-Cookie'
+    ],
     credentials: true,
   });
   app.useWebSocketAdapter(new IoAdapter(app));
