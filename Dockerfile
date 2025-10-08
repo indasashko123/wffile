@@ -14,6 +14,6 @@ WORKDIR /app
 COPY package*.json ./
 RUN npm install --only=production
 COPY --from=builder /app/dist ./dist
-
+RUN mkdir -p /app/uploads && chown -R node:node /app/uploads
 USER node
 CMD ["node", "dist/main.js"]

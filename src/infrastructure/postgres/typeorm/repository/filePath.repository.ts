@@ -6,6 +6,7 @@ import { FilePathModel } from "../models/filePath.model";
 export abstract class FilePathAbstractRepository implements IFilePathRepository {
     
     async getByAccount(accountId: string): Promise<FilePath[]> {
+        console.log(accountId);
         return await FilePathModel.find({where: {
             accountId: accountId
         }});

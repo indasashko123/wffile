@@ -46,9 +46,10 @@ export async function start(): Promise<void> {
     disableErrorMessages: false,
   }));
   app.enableCors({
-    origin: '*',
-    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
-    allowedHeaders: 'Content-Type, Accept, Authorization',
+    origin: ['http://localhost:3000', 'http://127.0.0.1:3000'],
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
+    allowedHeaders: 'Content-Type, Accept, Authorization, X-Requested-With, Range',
+    exposedHeaders: 'Content-Range, X-Content-Range',
     credentials: true,
   });
   app.useGlobalFilters(new CommonErrorFilter());

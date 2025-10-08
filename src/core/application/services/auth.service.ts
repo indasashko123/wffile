@@ -46,7 +46,8 @@ export abstract class AuthAbstractService implements IAuthService {
 
         return {
             accountResponse: {
-                login: account.login
+                login: account.login,
+                id: account.id
             },
             tokenResponse: {
                 access: tokens.access,
@@ -72,7 +73,8 @@ export abstract class AuthAbstractService implements IAuthService {
         });
         return {
             accountResponse: {
-                login: account.login
+                login: account.login,
+                id: account.id
             },
             tokenResponse: {
                 access: tokens.access,
@@ -101,7 +103,8 @@ export abstract class AuthAbstractService implements IAuthService {
         });
         return {
             accountResponse: {
-                login: account.login
+                login: account.login,
+                id: account.id
             },
             tokenResponse: {
                 access: tokens.access,

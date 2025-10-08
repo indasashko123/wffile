@@ -60,7 +60,8 @@ services:
     volumes:
       - file_storage_data:/app/uploads
     command: sh -c "node ./node_modules/typeorm/cli.js migration:run --dataSource ./dist/src/infrastructure/postgres/typeorm/migrations/data-source.js && node dist/main.js"
-    
+    user: "1000:1000"
+
 volumes:
   postgres_data: 
     driver: local

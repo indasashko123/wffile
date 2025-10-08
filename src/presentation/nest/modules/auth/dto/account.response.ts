@@ -6,4 +6,8 @@ export class AccountResponse {
         description: 'User login' 
     })
     login: string;
+    @ApiProperty({ 
+        description: 'User id' 
+    })
+    id: string;
 }

@@ -39,10 +39,12 @@ export class FileController {
     @UploadedFile() file: Express.Multer.File,
     @Req() req: ExtendRequest,
   ): Promise<string> {
+    console.log(file);
+
     const accountId = req.account.id;
     const fileData = {
       accountId,
-      originalName: file.originalname,
+      originalName:  Buffer.from(file.originalname, 'binary').toString('utf8'),
       buffer: file.buffer,
       mimetype: file.mimetype,
       size: file.size
@@ -66,7 +68,6 @@ export class FileController {
   @ApiBearerAuth('JWT-auth')
   @ApiParam({ name: 'id',  type: String, })
   async getFile(@Param('id', ParseUUIDPipe) id: string, @Req() req: ExtendRequest): Promise<FilePath> {
-    const accountId = req.account.id;
     const file = await this.fileService.getById(id);    
     return file;
   }
@@ -93,7 +94,10 @@ export class FileController {
   ): Promise<void> {
     const file = await this.fileService.getFile(fileId);
     res.setHeader('Content-Type', file.filePath.mimeType);
-    res.setHeader('Content-Disposition', `attachment; filename="${file.filePath.originalName}"`);
+    const encodedFilename = encodeURIComponent(file.filePath.originalName)
+    .replace(/['()]/g, escape)
+    .replace(/\*/g, '%2A');
+    res.setHeader('Content-Disposition', `attachment; filename*=UTF-8''${encodedFilename}`);
     file.stream.pipe(res);
   }
 }

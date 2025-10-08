@@ -1,4 +1,4 @@
-import { Body, Controller, Inject, Param, Post, Req, Res, UseGuards, UsePipes, ValidationPipe } from "@nestjs/common";
+import { Body, Controller, Get, Inject, Param, Post, Req, Res, UseGuards, UsePipes, ValidationPipe } from "@nestjs/common";
 import { AUTH_CONSTANTS } from "../../constants";
 import { IAuthService } from "../../../../../core/application";
 import { AuthResponse, RegistrationDto, TokenResponse } from "../dto";
@@ -7,6 +7,7 @@ import { ExtendRequest } from "../../../extends/extend.request";
 import { Response } from "express";
 import { AuthGuard } from "../guards";
 import { ApiBearerAuth, ApiBody, ApiCookieAuth, ApiParam, ApiResponse, ApiTags,  } from "@nestjs/swagger";
+import { AccountResponse } from "../dto/account.response";
 
 @ApiTags('auth')
 @Controller('auth')
@@ -14,6 +15,14 @@ export class AuthController {
     constructor(
         @Inject(AUTH_CONSTANTS.AUTH_SERVICE) private readonly authService: IAuthService
     ) {
+    }
+
+
+    @ApiResponse({status:200, type: AccountResponse})
+    @Get('/me')
+    @UseGuards(AuthGuard)
+    async getMe(@Req() req: ExtendRequest): Promise<AccountResponse> {
+        return req.account;
     }
 
     @ApiBody({ type: RegistrationDto })
