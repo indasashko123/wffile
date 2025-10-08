@@ -23,10 +23,10 @@
     "typeorm:migration-create": "ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js migration:create  ./src/infrastructure/postgres/typeorm/migrations/components/RENAME_ME"
   },
   "dependencies": {
-    "uuid": "^13.0.0",
     "@nestjs/common": "^11.0.1",
     "@nestjs/core": "^11.0.1",
     "@nestjs/platform-express": "^11.0.1",
+    "@nestjs/platform-socket.io": "^11.1.6",
     "@nestjs/swagger": "^11.2.0",
     "@nestjs/websockets": "^11.1.6",
     "@sentry/nestjs": "^10.11.0",
@@ -46,7 +46,8 @@
     "reflect-metadata": "^0.2.2",
     "rxjs": "^7.8.1",
     "socket.io": "^4.8.1",
-    "typeorm": "^0.3.25"
+    "typeorm": "^0.3.25",
+    "uuid": "^13.0.0"
   },
   "devDependencies": {
     "@nestjs/cli": "^11.0.0",

@@ -37,13 +37,14 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
 
     async handleConnection(client: AuthenticatedSocket) {
         try {
+            console.log(`CONNECTION`);
             const token = this.extractToken(client);
                 if (!token) {
                     client.disconnect();
                 return;
             }
             const payload = this.authService.validateAccess(token);
-      
+        
             client.user = {
                 id: payload.sub,
                 login: payload.login
@@ -54,11 +55,13 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
                 login: payload.login,
                 socketId: client.id
             });
+
             this.eventBus.publish(new UserJoinedEvent(
                 payload.sub,
                 payload.login
             ));
         } catch (error) {
+            console.log(error);
             client.disconnect();
         }
     }
@@ -83,6 +86,12 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
 
     private extractToken(client: Socket): string | null {
         const token = client.handshake.auth.token ||  client.handshake.query.token;
+        console.log(token);
         return token ? String(token) : null;
+    }
+
+
+    broadcastToAll(event: string, data: any): void {
+        this.server.emit(event, data);
     }
 }

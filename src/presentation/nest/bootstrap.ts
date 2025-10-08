@@ -1,5 +1,5 @@
 import { NestFactory } from '@nestjs/core';
-
+import { IoAdapter } from '@nestjs/platform-socket.io';
 import { CommonErrorFilter } from './exceptionFilters/Http.filter'; 
 import { AppModule, INFRASTRUCTURE_CONSTANTS } from './modules';
 import { ConfigAbstractService } from '../../core/application';
@@ -52,6 +52,7 @@ export async function start(): Promise<void> {
     exposedHeaders: 'Content-Range, X-Content-Range',
     credentials: true,
   });
+  app.useWebSocketAdapter(new IoAdapter(app));
   app.useGlobalFilters(new CommonErrorFilter());
   await app.listen(config.serverConfig.port);
 }

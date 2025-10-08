@@ -10,10 +10,10 @@ import { ChatGateway } from "./chat.gateway";
     imports: [EventModule, AuthModule],
     providers: [
         {provide: CHAT_CONSTANTS.CHAT_SERVICE, useClass: ChatService},
-        {provide: CHAT_CONSTANTS.CHAT_GATEWAY, useClass: ChatGateway}
+        ChatGateway
     ],
     exports : [
-        CHAT_CONSTANTS.CHAT_SERVICE
+        CHAT_CONSTANTS.CHAT_SERVICE,
     ]
 })
 export class ChatModule {}
